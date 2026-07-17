@@ -1,0 +1,18 @@
+<meta
+  http-equiv="Content-Security-Policy"
+  content="script-src 'nonce-aem' 'strict-dynamic' 'unsafe-inline' http: https:; base-uri 'self'; object-src 'none'; frame-src 'self' https:; require-trusted-types-for 'script';"
+  move-to-http-header="true"
+/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<script nonce="aem" src="/scripts/aem.js" type="module"></script>
+<script nonce="aem" src="/scripts/scripts.js" type="module"></script>
+<!--
+  Federated brand styles load FIRST so this site's own styles.css
+  (below) can cascade over them for sub-brand overrides. Point this
+  at your fedlibs project's live domain once it's deployed.
+  Note: this must stay a static <link> here (not JS-injected) —
+  a runtime loadCSS() call appends to the end of <head>, which would
+  load AFTER styles.css below and invert the intended cascade.
+-->
+<link rel="stylesheet" href="https://main--fedlibs--bkandala.aem.live/styles/styles.css"/>
+<link rel="stylesheet" href="/styles/styles.css"/>
