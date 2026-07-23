@@ -1,0 +1,26 @@
+[
+  {
+    "name": "hero",
+    "reason": "Custom animated hero unique to Site 1's launch campaign, not needed by other sites.",
+    "owner": "site-1-team",
+    "issue": "https://github.com/your-org/fedlibs/issues/0"
+  },
+  {
+    "name": "header",
+    "reason": "Site navigation and branding — inherently site-specific, not a candidate for sharing.",
+    "owner": "site-1-team",
+    "issue": "https://github.com/your-org/fedlibs/issues/0"
+  },
+  {
+    "name": "footer",
+    "reason": "Site footer links and branding — inherently site-specific, not a candidate for sharing.",
+    "owner": "site-1-team",
+    "issue": "https://github.com/your-org/fedlibs/issues/0"
+  },
+  {
+    "name": "fragment",
+    "reason": "scripts.js imports this via a hardcoded relative path (not the codeBasePath-driven block loader), so it structurally can't be federated without also patching scripts.js's fragment-loading logic.",
+    "owner": "site-1-team",
+    "issue": "https://github.com/your-org/fedlibs/issues/0"
+  }
+]

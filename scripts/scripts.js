@@ -144,18 +144,52 @@ function decorateButtons(main) {
 }
 
 /**
- * Fetch the list of block names this site wants sourced from the
- * federated project instead of forked locally. Same-origin fetch — no
- * CORS involved. Missing file just means "nothing is federated".
+ * Fetch fedlibs' auto-generated block catalog (cross-origin — fedlibs
+ * must send CORS headers back, same as any other federated resource).
+ * If it's unreachable, fail safe to "nothing is federated" rather than
+ * breaking the page.
  */
-async function getFederatedBlockNames() {
+async function getFedlibsCatalog(libsOrigin) {
   try {
-    const res = await fetch(`${window.hlx.codeBasePath}/blocks/federated-blocks.json`);
+    const res = await fetch(`${libsOrigin}/blocks-catalog.json`);
     if (!res.ok) return [];
-    return await res.json();
+    const { blocks } = await res.json();
+    return blocks.map((b) => b.name);
   } catch {
     return [];
   }
+}
+
+/**
+ * Fetch this site's justified local overrides (same-origin, no CORS).
+ * Each entry needs a name + reason; entries missing either are ignored
+ * so a careless override can't silently take effect.
+ */
+async function getLocalOverrideNames() {
+  try {
+    const res = await fetch(`${window.hlx.codeBasePath}/blocks/local-overrides.json`);
+    if (!res.ok) return [];
+    const overrides = await res.json();
+    return overrides.filter((o) => o.name && o.reason).map((o) => o.name);
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * A block is federated if fedlibs has it in its catalog AND this site
+ * hasn't filed a justified override for it. This is the reuse-by-default
+ * behavior: a team has to actively write down a reason to fork something
+ * that already exists, rather than a folder silently winning by being
+ * present. Anything not in the catalog at all is just a normal net-new
+ * site block — federation doesn't apply and nothing here touches it.
+ */
+async function getFederatedBlockNames(libsOrigin) {
+  const [catalogNames, overrideNames] = await Promise.all([
+    getFedlibsCatalog(libsOrigin),
+    getLocalOverrideNames(),
+  ]);
+  return catalogNames.filter((name) => !overrideNames.includes(name));
 }
 
 /**
@@ -170,10 +204,10 @@ async function getFederatedBlockNames() {
  * behavior: resolved from this site's own /blocks/ folder.
  */
 async function preloadFederatedBlocks(main) {
-  const federatedNames = await getFederatedBlockNames();
+  const libsOrigin = getLibsOrigin();
+  const federatedNames = await getFederatedBlockNames(libsOrigin);
   if (federatedNames.length === 0) return;
 
-  const libsOrigin = getLibsOrigin();
   const blocks = [...main.querySelectorAll('div.block')]
     .filter((block) => federatedNames.includes(block.dataset.blockName));
 

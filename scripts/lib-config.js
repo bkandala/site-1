@@ -5,8 +5,8 @@
  */
 const LIBS_ORIGINS = {
   local: 'http://localhost:4001',
-  preview: 'https://main--fedlibs--bkandala.aem.page',
-  live: 'https://main--fedlibs--bkandala.aem.live',
+  preview: 'https://main--fedlibs--{org}.aem.page',
+  live: 'https://main--fedlibs--{org}.aem.live',
 };
 
 // eslint-disable-next-line import/prefer-default-export
