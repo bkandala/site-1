@@ -1,12 +1,12 @@
 /**
  * Where to load the federated ("fedlibs") project from, per environment.
- * Replace {org} with your actual GitHub org / da.live org once both
+ * Replace bkandala with your actual GitHub org / da.live org once both
  * projects are live.
  */
 const LIBS_ORIGINS = {
   local: 'http://localhost:4001',
-  preview: 'https://main--fedlibs--{org}.aem.page',
-  live: 'https://main--fedlibs--{org}.aem.live',
+  preview: 'https://main--fedlibs--bkandala.aem.page',
+  live: 'https://main--fedlibs--bkandala.aem.live',
 };
 
 // eslint-disable-next-line import/prefer-default-export
